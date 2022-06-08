@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BRD.Monitoring.Infrastructure.Handlers
+namespace BRD.Monitoring.Infrastructure.FileHandlers
 {
-    internal class IFileHandler
+    public interface IFileHandlerResolver
     {
+        IFileHandler Get(string ext);
     }
 }

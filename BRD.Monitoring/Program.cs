@@ -1,11 +1,13 @@
 ﻿using Autofac;
 using BRD.Monitoring.Infrastructure;
+using BRD.Monitoring.Infrastructure.Helpers;
 using BRD.Monitoring.Infrastructure.IoC;
 using BRD.Monitoring.Infrastructure.Settings;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace BRD.Monitoring
 {
@@ -15,22 +17,30 @@ namespace BRD.Monitoring
         {
             var processResult = ProcessResultType.Success;
             Console.WriteLine("Monitoring tool has started");
-            Console.WriteLine("Press ESC to exit");
             var container = ContainerConfig.Configure();
             using (var scope = container.BeginLifetimeScope())
             {
                 try
                 {
-                    while (Console.ReadKey(true).Key != ConsoleKey.Escape)
+                    var settings = scope.Resolve<ISettings>();
+                    scope.Resolve<IDirectoryHelper>().CreateMissedFolders();
+
+                    while (true)
                     {
-                        var settings = scope.Resolve<ISettings>();
-
-                        var files = Directory.GetFiles(settings.ScanFolder);
-                        if (files.Any(m => Path.GetExtension(m) == ".xml"))
+                        var files = Directory.GetFiles(settings.ScanInputFolder);
+                        foreach (var f in files)
                         {
-
+                            var ext = Path.GetExtension(f);
+                            if (string.IsNullOrEmpty(ext))
+                            {
+                                continue;
+                            }
+                            if (files.Any(m => settings.SupportedExtensions.Contains(ext.ToLower())))
+                            {
+                                scope.Resolve<IFileProcessor>().Process(f);
+                            }
                         }
-
+                        Thread.Sleep(settings.IterationDelay);
                     }
                 }
                 catch (Exception ex)
@@ -46,3 +56,4 @@ namespace BRD.Monitoring
         }
     }
 }
+

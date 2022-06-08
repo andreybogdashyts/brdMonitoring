@@ -3,6 +3,7 @@
 ################################################################################
 
 /.vs
-/brdMonitoring/.vs
-/brdMonitoring/BRD.Monitoring/bin
-/brdMonitoring/BRD.Monitoring/obj
+/BRD.Monitoring/bin
+/BRD.Monitoring/obj
+/BRD.Monitoring.Tests/bin/Debug/net5.0
+/BRD.Monitoring.Tests/obj
