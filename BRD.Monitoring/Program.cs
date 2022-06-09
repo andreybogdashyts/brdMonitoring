@@ -6,9 +6,6 @@ using BRD.Monitoring.Infrastructure.Settings;
 using BRD.Monitoring.Infrastructure.Watchers;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading;
 
 namespace BRD.Monitoring

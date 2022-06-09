@@ -23,6 +23,11 @@ namespace BRD.Monitoring.Infrastructure.Helpers
             }
         }
 
+        public void DeleteFile(string path)
+        {
+            File.Delete(path);
+        }
+
         public string[] GetFiles()
         {
             return Directory.GetFiles(_settings.ScanInputFolder);

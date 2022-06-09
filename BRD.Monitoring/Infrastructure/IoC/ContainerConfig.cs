@@ -20,6 +20,7 @@ namespace BRD.Monitoring.Infrastructure.IoC
             builder.Populate(services);
             builder.RegisterType<Settings.Settings>().As<ISettings>();
             builder.RegisterType<DirectoryHelper>().As<IDirectoryHelper>();
+            builder.RegisterType<CalculationHelper>().As<ICalculationHelper>();
             builder.RegisterType<FileHandlerResolver>().As<IFileHandlerResolver>();
             builder.RegisterType<FileProcessor>().As<IFileProcessor>();
             builder.RegisterType<FileWatcher>().As<IFileWatcher>();

@@ -5,5 +5,7 @@ namespace BRD.Monitoring.Infrastructure.Helpers
     {
         void CreateMissedFolders();
         string[] GetFiles();
+
+        void DeleteFile(string path);
     }
 }
