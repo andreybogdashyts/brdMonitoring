@@ -3,8 +3,10 @@ using BRD.Monitoring.Infrastructure;
 using BRD.Monitoring.Infrastructure.Helpers;
 using BRD.Monitoring.Infrastructure.IoC;
 using BRD.Monitoring.Infrastructure.Settings;
+using BRD.Monitoring.Infrastructure.Watchers;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -25,23 +27,12 @@ namespace BRD.Monitoring
                     var settings = scope.Resolve<ISettings>();
                     scope.Resolve<IDirectoryHelper>().CreateMissedFolders();
 
-                    while (true)
+                    foreach (var ext in settings.SupportedExtensions)
                     {
-                        var files = Directory.GetFiles(settings.ScanInputFolder);
-                        foreach (var f in files)
-                        {
-                            var ext = Path.GetExtension(f);
-                            if (string.IsNullOrEmpty(ext))
-                            {
-                                continue;
-                            }
-                            if (files.Any(m => settings.SupportedExtensions.Contains(ext.ToLower())))
-                            {
-                                scope.Resolve<IFileProcessor>().Process(f);
-                            }
-                        }
-                        Thread.Sleep(settings.IterationDelay);
+                        var watcher = scope.Resolve<IFileWatcher>();
+                        watcher.Initialize(ext);
                     }
+                    new AutoResetEvent(false).WaitOne();
                 }
                 catch (Exception ex)
                 {

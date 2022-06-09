@@ -22,5 +22,10 @@ namespace BRD.Monitoring.Infrastructure.Helpers
                 Directory.CreateDirectory(_settings.ScanOutputFolder);
             }
         }
+
+        public string[] GetFiles()
+        {
+            return Directory.GetFiles(_settings.ScanInputFolder);
+        }
     }
 }
